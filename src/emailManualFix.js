@@ -9,7 +9,7 @@ import { sendReply } from './sendReplyRequester.js';
  
 dotenv.config(); 
 
-const ticketId = 25125;
+const ticketId = 26384 //25125;
 const {isTicket, ticketNumber, submissionId} = await zammadTicket(ticketId);
 console.log('ticket number is:', ticketNumber);
 const queryID = 'de7e79ae-5b67-47bf-b8b0-8c4fa830348e';

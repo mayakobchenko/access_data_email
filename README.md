@@ -155,3 +155,7 @@ Redeployment steps:
 5. check the image name yaml file
 
 docker pull docker-registry.ebrains.eu/ebrains-data-curation/restrictedaccess@sha256:c1931c2eda30687b9322a1f252eaa785ce680afeff27d3bff5ab6f344e199264
+
+
+to check OIDC client:
+https://wiki.ebrains.eu/bin/view/OIDC?srid=Rg0vdRzm
