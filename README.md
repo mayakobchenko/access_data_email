@@ -159,3 +159,7 @@ docker pull docker-registry.ebrains.eu/ebrains-data-curation/restrictedaccess@sh
 
 to check OIDC client:
 https://wiki.ebrains.eu/bin/view/OIDC?srid=Rg0vdRzm
+
+harbor authentication issue: 
+add curl
+https://github.com/FZJ-INM1-BDA/siibra-explorer/commit/68e7a9ffb0b525a04cf7710bea4400bb8959e0d9

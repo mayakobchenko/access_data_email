@@ -10,8 +10,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Debug TLS
+        run: |
+          curl -v https://docker-registry.ebrains.eu/v2/  
       - name: Build and push Docker image
         run: |
+          echo "Try again just for good measure"
+          curl -v https://docker-registry.ebrains.eu/v2/
+          echo "Login to docker registry"
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin docker-registry.ebrains.eu
           docker build -t docker-registry.ebrains.eu/ebrains-data-curation/restrictedaccess:${{ github.sha }} .
           docker push docker-registry.ebrains.eu/ebrains-data-curation/restrictedaccess:${{ github.sha }}
