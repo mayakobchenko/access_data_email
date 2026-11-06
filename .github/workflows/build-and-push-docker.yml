@@ -34,8 +34,12 @@ jobs:
             printf '%s\n' "$KUBE_CONFIG_DATA" > "$KC"
             echo "kubeconfig written as plain text"
           fi
-        - name: Update Kubernetes deployment
-          env: 
-            KUBECONFIG: ${{ runner.temp }}/.kube/kubeconfig.yaml
-          run: |
-            kubectl set image deployment/email-sender container-email-sender=docker-registry.ebrains.eu/ebrains-data-curation/restrictedaccess:${{ github.sha }} --namespace=email-sender-data-access
+      - name: Update Kubernetes deployment
+        env: 
+          KUBECONFIG: ${{ runner.temp }}/.kube/kubeconfig.yaml
+        run: |
+          kubectl set image deployment/email-sender container-email-sender=docker-registry.ebrains.eu/ebrains-data-curation/restrictedaccess:${{ github.sha }} --namespace=email-sender-data-access
+      - name: Wait for rollout
+        env:
+          KUBECONFIG: ${{ runner.temp }}/.kube/kubeconfig.yaml
+        run: kubectl rollout status deployment/email-sender --namespace=email-sender-data-access --timeout=180s    
