@@ -7,3 +7,5 @@ wizard.json
 emailer.json
 modify_oidc_client.ipynb
 emailer_updated_Oliver.json
+*kubeconfig*
+rke2-*.yaml

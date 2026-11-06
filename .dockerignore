@@ -1,0 +1,9 @@
+node_modules
+.git
+.github
+.env
+.env.*
+*.log
+*kubeconfig*
+rke2-*.yaml
+README.md

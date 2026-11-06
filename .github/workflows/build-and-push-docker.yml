@@ -24,7 +24,7 @@ jobs:
       - name: Write kubeconfig to file
         run: |
           mkdir -p ${{ runner.temp }}/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" > ${{ runner.temp }}/.kube/kubeconfig.yaml
+          echo "${{ secrets.KUBE_CONFIG_JSC_PROD }}" > ${{ runner.temp }}/.kube/kubeconfig.yaml
       - name: Update Kubernetes deployment
         env: 
           KUBECONFIG: ${{ runner.temp }}/.kube/kubeconfig.yaml

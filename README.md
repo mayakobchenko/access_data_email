@@ -2,7 +2,7 @@
 
 An app aiming to solve this issue: https://gitlab.ebrains.eu/kanban/curators/ebrains-curation-team/-/issues/129
 
-A vanilla javascript backend app (express node server) running on Rancher (kubernetes). Written in Node 20.17.0
+A vanilla javascript backend app (express node server) running on Rancher (kubernetes). Runs on Node.js 22 (the Docker image uses node:22.23.4-alpine, which contains the fix for CVE-2026-111497)
 
 The app sends an automatic email to data custodian informing about submitted request to access externally hosted data.
 
@@ -12,6 +12,19 @@ In order to fetch information from the Knowledge Graph API, we set up a service 
 Service account needs permision to access contact information of the data custodians in both spaces: "RELEASED" and "IN_PROGRESS".
 
 The entry file of the application is serverEmailAutomat.js (express node server).
+
+## Security of the webhook
+
+- `/webhook` checks that the call comes from Zammad. Set `WEBHOOK_SECRET` (Zammad: "HMAC SHA1 Signature Token", header `X-Hub-Signature`) and/or `WEBHOOK_BEARER_TOKEN` (Zammad: "Bearer Token") in the deployment and in the Zammad webhook. Without them the endpoint is open and the server logs a warning at start.
+- A ticket is handled only once (Zammad calls the webhook several times and our own emails add articles to the ticket). After an error the ticket can be tried again.
+- Errors are sent to support (`SUPPORT_EMAIL`, `SUPPORT_TICKET_ID`) with the log file attached.
+- Never commit kubeconfig files or tokens. The kubeconfig for the deployment is stored in the GitHub secret `KUBE_CONFIG`.
+
+## Tests
+
+```
+$ npm test
+```
 
 To launch the server:
 
@@ -162,4 +175,7 @@ https://wiki.ebrains.eu/bin/view/OIDC?srid=Rg0vdRzm
 
 harbor authentication issue: 
 add curl
+dicussed in rocket chat 
 https://github.com/FZJ-INM1-BDA/siibra-explorer/commit/68e7a9ffb0b525a04cf7710bea4400bb8959e0d9
+
+https://restrictedaccess.apps.ebrains.eu/
