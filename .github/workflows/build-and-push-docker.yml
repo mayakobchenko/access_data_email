@@ -22,9 +22,18 @@ jobs:
           docker build -t docker-registry.ebrains.eu/ebrains-data-curation/restrictedaccess:${{ github.sha }} .
           docker push docker-registry.ebrains.eu/ebrains-data-curation/restrictedaccess:${{ github.sha }}
       - name: Write kubeconfig to file
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_JSC_PROD }}
         run: |
-          mkdir -p ${{ runner.temp }}/.kube
-          echo "${{ secrets.KUBE_CONFIG_JSC_PROD }}" > ${{ runner.temp }}/.kube/kubeconfig.yaml
+          mkdir -p "${{ runner.temp }}/.kube"
+          KC="${{ runner.temp }}/.kube/kubeconfig.yaml"
+          # the secret may be base64 (one line) or the plain YAML
+          if printf '%s' "$KUBE_CONFIG_DATA" | base64 -d > "$KC" 2>/dev/null && grep -q "apiVersion" "$KC"; then
+            echo "kubeconfig decoded from base64"
+          else
+            printf '%s\n' "$KUBE_CONFIG_DATA" > "$KC"
+            echo "kubeconfig written as plain text"
+          fi
       - name: Update Kubernetes deployment
         env: 
           KUBECONFIG: ${{ runner.temp }}/.kube/kubeconfig.yaml
